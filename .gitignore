@@ -1,0 +1,7 @@
+student-mat.csv
+student-por.csv
+__pycache__/
+*.pyc
+venv/
+.venv/
+.env
