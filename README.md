@@ -1,39 +1,46 @@
 # Student Performance Prediction System
 
-An AI-powered machine learning web application that predicts student performance as Low, Medium, or High and explains the factors influencing each prediction.
+An AI-powered machine learning web application that predicts student academic performance as Low, Medium, or High and explains the factors influencing each prediction using Explainable AI (SHAP).
 
-## Project Overview
+## 1. Project Overview
 
-This project uses student information and study-related factors to predict academic performance. It also uses Explainable AI (SHAP) to identify factors that contributed to a prediction.
+This project uses student demographic, family, and study-related information to predict academic performance.
 
-The system is intended for educational demonstration and should not be used to make final judgments about students.
+A Random Forest classifier predicts the student's performance category, while SHAP (SHapley Additive exPlanations) helps explain which input features contributed most to the prediction.
 
-## Features
+This project is intended for educational demonstration and should not be used to make final judgments about students.
+
+## 2. Features
 
 * Predicts student performance in three categories: Low, Medium, and High.
 * Accepts 31 student input features.
-* Displays predictions through a Flask web application.
-* Uses SHAP to show the five most influential factors for a prediction.
-* Includes a simple, styled user interface.
+* Provides predictions through a Flask web application.
+* Displays the five largest absolute SHAP contributions for the predicted class.
+* Includes a styled HTML and CSS interface.
+* Uses preprocessing and one-hot encoding for categorical features.
 
-## Technologies Used
+## 3. Technologies Used
 
 * Python
-* Pandas
-* NumPy
+* Pandas and NumPy
 * Scikit-learn
 * SHAP
 * Flask
 * HTML and CSS
 * Git and GitHub
 
-## Dataset
+## 4. Dataset
 
-The project uses the UCI Student Performance dataset, specifically `student-mat.csv`.
+This project uses the Student Performance dataset from the UCI Machine Learning Repository, specifically `student-mat.csv`.
 
-The dataset contains information about students' demographics, family background, study habits, school support, and academic performance.
+Dataset source:
+https://archive.ics.uci.edu/dataset/320/student+performance
 
-The final grade (G3) is converted into three categories:
+The dataset contains student demographic information, family background, study habits, school support, and academic grades.
+
+### Target Categories
+
+The final grade (`G3`) is converted into three performance categories:
 
 | Category | Grade range |
 | -------- | ----------- |
@@ -41,17 +48,24 @@ The final grade (G3) is converted into three categories:
 | Medium   | 10–14       |
 | High     | 15–20       |
 
-The previous period grades G1 and G2 are excluded from the model inputs to reduce target leakage.
+The previous period grades (`G1` and `G2`) are excluded from the model inputs to reduce target leakage.
 
-## Machine Learning Model
+The dataset is not included in this GitHub repository. Download the UCI Student Performance dataset from the source above and place `student-mat.csv` in the project root folder, alongside `app.py`.
 
-The project uses a Random Forest Classifier with preprocessing and one-hot encoding for categorical features.
+## 5. Machine Learning Model
 
-The dataset is split into training and testing sets using an 80:20 split, with stratification to preserve class proportions.
+The project uses a Random Forest Classifier with a preprocessing pipeline.
+
+* Categorical features are encoded using one-hot encoding.
+* The dataset is split into training and testing sets using an 80:20 split.
+* Stratification is used to preserve class proportions.
+* The model uses class weighting to help address class imbalance.
 
 ### Model Evaluation
 
-Held-out test accuracy: **53.16%**
+The baseline model was evaluated on a held-out test set.
+
+**Held-out test accuracy: 53.16%**
 
 | Category | Precision | Recall | F1-score |
 | -------- | --------: | -----: | -------: |
@@ -59,67 +73,107 @@ Held-out test accuracy: **53.16%**
 | Low      |      0.52 |   0.50 |     0.51 |
 | Medium   |      0.56 |   0.58 |     0.57 |
 
-These results are based on a single train-test split and do not guarantee performance on new student populations.
+These results are from a single train-test split and do not guarantee performance on new students or populations.
 
-## Explainable AI
+The Flask demonstration trains its model using the available dataset when the application starts. The held-out evaluation result above comes from the separate evaluation script and should not be interpreted as a guarantee of the web application's predictions.
 
-SHAP (SHapley Additive exPlanations) is used to estimate the contribution of input features to individual predictions.
+## 6. Explainable AI (SHAP)
 
-The application displays the five factors with the largest absolute SHAP contributions for the predicted class.
+SHAP is used to estimate how input features contribute to individual model predictions.
 
-These values indicate contribution magnitude, not necessarily whether a factor increases or decreases predicted performance.
+The application displays the five features with the largest absolute SHAP contributions for the predicted class.
 
-## How to Run the Project
+These values represent contribution magnitudes. They do not necessarily indicate whether a feature increases or decreases predicted performance, and they do not establish cause and effect.
 
-1. Install Python.
-2. Open a terminal in the project folder.
-3. Install the required packages:
-
-```bash
-py -m pip install pandas numpy scikit-learn shap flask
-```
-
-4. Make sure `student-mat.csv` is in the project folder.
-5. Start the web application:
-
-```bash
-py app.py
-```
-
-6. Open this address in your browser:
-
-```text
-http://127.0.0.1:5000
-```
-
-## Project Structure
+## 7. Project Structure
 
 ```text
 student_final/
 │
 ├── app.py
 ├── student_prediction.py
-├── student-mat.csv
+├── student-mat.csv       # Download separately; not tracked by Git
 ├── README.md
+├── .gitignore
 │
 └── templates/
     └── index.html
 ```
 
-## Future Improvements
+## 8. Installation and Setup
 
-* Improve model performance through systematic model evaluation and tuning.
+### Prerequisites
+
+* Python installed on your computer
+* Git
+* Internet access to download the dataset and install Python packages
+
+### Step 1: Clone the repository
+
+```bash
+git clone https://github.com/PatarlaYamini/student-performance-ai-xai.git
+```
+
+Move into the project folder:
+
+```bash
+cd student-performance-ai-xai
+```
+
+### Step 2: Download the dataset
+
+Download the UCI Student Performance dataset from:
+
+https://archive.ics.uci.edu/dataset/320/student+performance
+
+Extract the downloaded files and copy `student-mat.csv` into the project folder, alongside `app.py`.
+
+The application requires this file to train the model.
+
+### Step 3: Install the required packages
+
+On Windows, run:
+
+```bash
+py -m pip install pandas numpy scikit-learn shap flask
+```
+
+### Step 4: Start the web application
+
+Run:
+
+```bash
+py app.py
+```
+
+The application trains the model and creates the SHAP explainer when it starts.
+
+### Step 5: Open the application
+
+Open this address in your browser:
+
+http://127.0.0.1:5000
+
+Keep the terminal running while using the application. To stop the local server, press `Ctrl + C` in the terminal.
+
+## 9. Future Improvements
+
+* Improve model performance through systematic evaluation and tuning.
 * Add more detailed and user-friendly SHAP visualizations.
 * Improve input validation and error handling.
 * Add automated tests.
 * Explore responsible deployment and model monitoring.
 
-## Disclaimer
+## 10. Disclaimer
 
 This project is for educational and demonstration purposes only. Predictions are estimates based on historical data and should not be used as the sole basis for educational decisions.
 
-## Dataset Source
+Student performance depends on many factors that may not be represented in the dataset. The model may produce inaccurate or biased predictions and should not be used to label, rank, or make consequential decisions about students.
 
-UCI Machine Learning Repository — Student Performance dataset.
+## 11. Dataset Attribution
 
+Dataset: Student Performance
+Source: UCI Machine Learning Repository
 https://archive.ics.uci.edu/dataset/320/student+performance
+
+Please refer to the dataset's official page for its citation and usage terms.
