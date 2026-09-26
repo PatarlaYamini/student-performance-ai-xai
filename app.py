@@ -160,7 +160,7 @@ def home():
                 importance.get(original_name, 0) + abs(float(value))
             )
 
-        friendly_names = {
+    friendly_names = {
     "schoolsup": "Extra school support",
     "Fjob": "Father's job",
     "absences": "Number of absences",
@@ -170,15 +170,21 @@ def home():
     "studytime": "Study time",
     "failures": "Previous failures",
     "health": "Health status",
-"freetime": "Free time",
-"reason": "Reason for choosing school"
+    "freetime": "Free time",
+    "reason": "Reason for choosing school",
+    "paid": "Extra paid classes",
+    "famrel": "Family relationship",
+    "Walc": "Weekend alcohol consumption",
+    "Dalc": "Weekday alcohol consumption",
+    "traveltime": "Travel time to school",
+    "age": "Student age"
 }
-        shap_factors = sorted(
+    shap_factors = sorted(
             importance.items(),
             key=lambda item: item[1],
             reverse=True
-        )[:5]
-        shap_factors = [
+            )[:5]
+    shap_factors = [
     (friendly_names.get(name, name), value)
     for name, value in shap_factors
 ]
